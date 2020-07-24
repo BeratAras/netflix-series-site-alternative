@@ -6,6 +6,27 @@ class Database extends CI_Model {
         return $result;
     }
 
+    function getResult($table)
+    {
+        return $this->db->get($table)->result();
+    }
+
+    function getWhereResult($table, $where = array())
+    {
+        return $this->db->where($where)->get($table)->result();
+    }
+
+    function seriesGet($slug)
+    {
+        $this->db->select('*');
+		$this->db->from('contents');
+		$this->db->join('episodes', 'content_id = ep_content_id');
+        $this->db->where('content_type', 'series');
+        $this->db->where('content_url', $slug);
+		$query = $this->db->get();
+        return $query->row();
+    }
+
     function login($username, $pass){
         $result=$this->db
         ->select('*')

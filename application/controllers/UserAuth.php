@@ -64,7 +64,7 @@ class UserAuth extends CI_Controller {
         if($result){
             $this->session->set_userdata('status', true);
             $this->session->set_userdata('user', $result);
-            $this->load->view('front/homepage');
+            redirect('/');
         }else{
             $data['form_errors'] = "Kullanıcı Adı veya Şifre Yanlış!";
             $this->load->view('front/login', $data);

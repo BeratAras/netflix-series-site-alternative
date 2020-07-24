@@ -14,13 +14,22 @@ class Homepage extends CI_Controller {
 
 	public function index()
 	{
+		
+		$data = new stdClass();
+
+		// Facebook Login Process //
         $this->load->library("facebookSDK");
         $this->fb=$this->facebooksdk;
         $callback="http://localhost/Netflix/homepage/facebookLogin";
-		$data['url']=$this->fb->getLoginUrl($callback);
+		$data->url = $this->fb->getLoginUrl($callback);
+
+		// Homepage Process //
+		$this->load->model('Database');
+		$data->contents = $this->Database->getResult('contents');
+		$data->seriesContents = $this->Database->getWhereResult('contents', ['content_type' => 'Series']);
 
         $this->load->view('front/homepage', $data);
-    }
+	}
 
     public function facebookLogin()
     {
@@ -57,6 +66,8 @@ class Homepage extends CI_Controller {
 		}
 	}
 	
+	// Profile Process //
+
 	public function profile()
 	{
 		$user = $this->session->userdata('user');
