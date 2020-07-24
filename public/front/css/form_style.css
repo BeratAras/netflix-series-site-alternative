@@ -1,0 +1,46 @@
+.register-form{
+    color: white;
+    font-size: 25px;
+}
+
+.register-form label {
+    font-family: 'Dosis', sans-serif;
+    font-size: 14px;
+    color: #ffff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.register-form input {
+    font-family: 'Dosis', sans-serif;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #222222;
+    font-weight: bold;
+    margin-top: 10px;
+    height: 42px;
+    border: 1px solid #e1e1e1;
+}
+
+.register-form .form-check input {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #e1e1e1;
+    margin-right: 5px;
+    position: relative;
+}
+
+.register-form button {
+    border-radius: 20px;
+    font-family: 'Dosis', sans-serif;
+    font-size: 14px;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: none;
+    background-color: #dd003f;
+    height: 42px;
+    width: 100%;
+    cursor: pointer;
+}
+
