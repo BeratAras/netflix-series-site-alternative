@@ -82,7 +82,7 @@
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label>Trailer</label>
-                                        <input type="file" name="trailer">
+                                        <input type="text" class="form-control" name="trailer">
                                     </div>
                                 </div>
                                 <div class="col-md-5">

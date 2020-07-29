@@ -4,9 +4,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //front
 $route['default_controller']    = 'homepage';
 $route['register']              = 'UserAuth/register';
-$route['homepage']              = 'UserAuth/login';
+$route['login']                 = 'UserAuth/login';
 $route['profile']               = 'Homepage/profile';
-$route['series/(.+)']           = 'SmDetail/index/$1';
+$route['watch/(.+)/(.+)']       = 'SmDetail/watchDetail/$1/$2';
+$route['watch/(.+)']            = 'SmDetail/index/$1';
 
 //back
 $route['nedmin']                    =   'Back/Dashboard/index';

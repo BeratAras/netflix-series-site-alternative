@@ -73,8 +73,10 @@ class Dashboard extends CI_Controller {
         $kind           =   $this->input->post('kind');
         $director       =   $this->input->post('director');
         $writer         =   $this->input->post('writer');
+        $trailer        =   $this->input->post('trailer');
         $description    =   $this->input->post('description');
         $keywords       =   $this->input->post('keywords');
+        $slug           =   url_title($name, '-', true);
         $type           =   $this->input->post('type');
         $date           =   date('d-m-Y');
 
@@ -94,14 +96,25 @@ class Dashboard extends CI_Controller {
             $img_path 			= $img['file_name'];
             $databaseInsertImg 	= $img_path;
 
+            $in_banner = $this->upload->do_upload('in_banner');
+            if($in_banner)
+            {
+                $in_img 		= $this->upload->data();
+                $in_img_path 	= $in_img['file_name'];
+                $inImgInsert 	= $in_img_path;
+            }
+
             $data=array(
                 'content_name'          =>  $name,
                 'content_description'   =>  $description,
                 'content_kind'          =>  $kind,
                 'content_out_banner'    =>  $databaseInsertImg,
+                'content_in_banner'     =>  $inImgInsert,
                 'content_director'      =>  $director,
                 'content_writer'        =>  $writer,
+                'content_trailer'       =>  $trailer,
                 'content_keywords'      =>  $keywords,
+                'content_url'           =>  $slug,
                 'content_type'          =>  $type,
                 'content_create_date'   =>  $date
             );
@@ -196,7 +209,7 @@ class Dashboard extends CI_Controller {
         $episode    =   $this->input->post('episode');
         $name       =   $this->input->post('name');
         $frame      =   $this->input->post('frame');
-        $slug       =   url_title($name, '-', true);
+        $slug       =   $this->input->post('season'); $this->input->post('episode') + '-episode';
         $date       =   date('d-m-Y');
         $type       =   $this->input->post('type');
 

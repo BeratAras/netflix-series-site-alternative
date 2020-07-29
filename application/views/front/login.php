@@ -1,3 +1,8 @@
+<?php 
+if($this->session->userdata('status')){
+    redirect('/');
+}    
+?>
 <?php $this->load->view('front/include/head') ?>
 <?php $this->load->view('front/include/navbar') ?>
 

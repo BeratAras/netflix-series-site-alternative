@@ -142,12 +142,12 @@
 						</li>
 					</ul>
 					<ul class="nav navbar-nav flex-child-menu menu-right">             
-						<li><a href="#">Yardım</a></li>
+						<li><a href="#">İletişim</a></li>
 						<?php if(!$this->session->userdata('status')){ ?>
 							<li class="loginLink"><a href="#">Giriş</a></li>
 							<li class="btn signupLink"><a href="#">Kayıt</a></li>
 						<?php }else{ ?>
-							<div class="user-img">
+							<div class="user-img-nav">
 								<a href="#"><img src="<?php echo base_url('public/front/images/uploads/user/').$user[0]->user_img ?>" width="50" height="50" alt=""><br></a>
 							</div>
 							<li class="dropdown first">

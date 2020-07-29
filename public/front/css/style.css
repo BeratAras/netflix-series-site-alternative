@@ -5343,7 +5343,7 @@ ul {
   color: #ffffff;
   font-weight: 700;
   text-transform: none;
-  margin-bottom: 25px;
+  margin-bottom: 0px;
 }
 .blog-detail-ct p {
   margin-bottom: 20px;
@@ -5354,6 +5354,7 @@ ul {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
+  margin-right: 10px;
 }
 .blog-detail-ct h4 {
   font-family: 'Dosis', sans-serif;
@@ -5368,15 +5369,23 @@ ul {
     margin-bottom: 0;
   }
 }
-.blog-detail-ct .flex-it {
+.flex-it{
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+}
+.blog-detail-ct .flex-it {
   justify-content: space-between;
+}
+.comments .flex-it {
+  justify-content: left;
+}
+.blog-detail-ct .flex-it img {
+  border-radius: 20px;
 }
 @media (max-width: 767px) {
   .blog-detail-ct .flex-it {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
   }
 }
 .blog-detail-ct .flex-it2 {
@@ -5391,6 +5400,12 @@ ul {
   .blog-detail-ct .flex-ct img {
     margin-left: 0;
   }
+  .blog-detail-ct .flex-it2 {
+    padding-left: 10px;
+  }
+  .blog-detail-ct .flex-it p {
+    padding-left: 10px;
+}
 }
 .blog-detail-ct .share-tag {
   margin-top: 50px;
@@ -5417,6 +5432,7 @@ ul {
   background-color: #071829;
   padding: 0px  25px 25px 25px;
   margin-top: 30px;
+  text-align: left;
 }
 @media (max-width: 767px) {
   .blog-detail-ct .cmt-item {
@@ -5446,7 +5462,6 @@ ul {
   font-size: 14px;
   color: #ffffff;
   font-weight: bold;
-  text-transform: capitalize;
 }
 .blog-detail-ct .cmt-item h6 a:hover {
   color: #dcf836;
@@ -5473,6 +5488,7 @@ ul {
   margin-bottom: 30px;
 }
 .blog-detail-ct .comment-form form input,
+.blog-detail-ct .comment-form form select,
 .blog-detail-ct .comment-form form textarea {
   font-family: 'Nunito', sans-serif;
   font-size: 12px;
@@ -5488,6 +5504,7 @@ ul {
   margin-bottom: 30px;
 }
 .blog-detail-ct .comment-form form input:hover,
+.blog-detail-ct .comment-form form select:hover,
 .blog-detail-ct .comment-form form textarea:hover {
   border: 1px solid #dcf836;
 }
@@ -5604,7 +5621,6 @@ ul {
 }
 /*series single hero*/
 .sr-single-hero {
-  background: url('../images/uploads/sr-single.jpg') no-repeat;
   height: 598px;
 }
 .hero3 {
@@ -5710,6 +5726,12 @@ ul {
 }
 .user-information .user-img img {
   margin-bottom: 30px;
+}
+.user-img-nav a img{
+  border-radius: 100px; 
+  background-size: contain;
+  height: 50px;
+  width: 50;
 }
 .user-information ul {
   padding: 0 25px;

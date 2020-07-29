@@ -1,9 +1,8 @@
 <?php
 class Database extends CI_Model {
     
-    function create($data=array(), $where){
-        $result=$this->db->insert($where, $data);
-        return $result;
+    function create($table, $data=array()){
+        return $this->db->insert($table, $data);
     }
 
     function getResult($table)
@@ -16,15 +15,44 @@ class Database extends CI_Model {
         return $this->db->where($where)->get($table)->result();
     }
 
+    function getWhereLimitResult($table, $where = array(), $limit, $count)
+    {
+        return $this->db->limit($limit, $count)->where($where)->get($table)->result();
+    }
+
+    function delete($table, $where = array())
+    {
+        return $this->db->where($where)->delete($table);
+    }
+
+    function getCount($table)
+    {
+        return $this->db->count_all($table);
+    }
+
     function seriesGet($slug)
     {
-        $this->db->select('*');
-		$this->db->from('contents');
-		$this->db->join('episodes', 'content_id = ep_content_id');
-        $this->db->where('content_type', 'series');
-        $this->db->where('content_url', $slug);
-		$query = $this->db->get();
-        return $query->row();
+        $result = $this->db
+        ->select('*')
+        ->from('contents')
+		->join('episodes', 'content_id = ep_content_id')
+        ->where('content_url', $slug)
+		->get()
+        ->row();
+        return $result;
+    }
+
+    function watchGet($content_slug, $ep_slug)
+    {
+        $result = $this->db
+        ->select('*')
+        ->from('episodes')
+		->join('contents', 'content_id = ep_content_id')
+        ->where('content_url', $content_slug)
+        ->where('ep_url', $ep_slug)
+		->get()
+        ->row();
+        return $result;
     }
 
     function login($username, $pass){
@@ -94,6 +122,18 @@ class Database extends CI_Model {
         ->where('user_id', $id)
         ->update('users', $data);
         return $result;
+    }
+
+    function listCheck($contentID, $userID)
+    {
+        $listCheck = $this->db
+        ->select('*')
+        ->from('user_content_list')
+        ->where('list_user_id', $userID)
+        ->where('list_content_id', $contentID)
+        ->get()
+        ->result();
+        return $listCheck;
     }
 
 }

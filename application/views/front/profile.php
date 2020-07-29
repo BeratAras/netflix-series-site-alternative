@@ -144,7 +144,7 @@
 </div>
 <?php 
 }else{
-    redirect('login');
+    redirect('/');
 }
 ?>
 <?php $this->load->view('front/include/footer') ?>

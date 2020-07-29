@@ -45,7 +45,7 @@ class UserAuth extends CI_Controller {
             'user_create_date'  => $date
             );
             $this->load->model('Database');
-            $create = $this->Database->create($data, 'users');
+            $create = $this->Database->create('users', $data);
             if($create){
                 $this->session->set_flashdata('inf', '<div class="alert alert-success" role="alert"> Üyelik İşlemi Tamamlandı. </div>' );
                 redirect('homepage');
@@ -64,7 +64,7 @@ class UserAuth extends CI_Controller {
         if($result){
             $this->session->set_userdata('status', true);
             $this->session->set_userdata('user', $result);
-            redirect('/');
+            redirect($_SERVER['HTTP_REFERER']);
         }else{
             $data['form_errors'] = "Kullanıcı Adı veya Şifre Yanlış!";
             $this->load->view('front/login', $data);
@@ -73,6 +73,6 @@ class UserAuth extends CI_Controller {
 
     public function logout(){
         $this->session->sess_destroy();
-        redirect('homepage');
+        redirect($_SERVER['HTTP_REFERER']);
     }
 }

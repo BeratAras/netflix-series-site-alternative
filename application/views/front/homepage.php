@@ -118,7 +118,7 @@
 			            				<img src="<?php echo base_url("public/front/images/uploads/banner/out_banner/$content->content_out_banner") ?>" alt="">
 			            			</div>
 			            			<div class="hvr-inner">
-			            				<a href="<?php echo base_url("series/$content->content_url") ?>"> İzle <i class="ion-android-arrow-dropright"></i> </a>
+			            				<a href="<?php echo base_url("watch/$content->content_url") ?>"> İzle <i class="ion-android-arrow-dropright"></i> </a>
 			            			</div>
 			            			<div class="title-in">
 			            				<h6><a href="#"><?php echo $content->content_name ?></a></h6>

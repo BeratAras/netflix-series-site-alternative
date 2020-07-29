@@ -1,7 +1,9 @@
-<?php $this->load->view('front/include/head') ?>
-<?php $this->load->view('front/include/navbar') ?>
-
-<div class="hero sr-single-hero sr-single">
+<?php $this->load->view('front/include/head'); ?>
+<?php $this->load->view('front/include/navbar'); ?>
+<?php $user = $this->session->userdata('user'); ?>
+<?php $userStatus = $this->session->userdata('status'); ?>
+<div style="background: url('<?php echo base_url("public/front/images/uploads/banner/out_banner/$series->content_in_banner"); ?>'); no-repeat;"
+    class="hero sr-single-hero sr-single">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -19,7 +21,8 @@
         <div class="row ipad-width2">
             <div class="col-md-4 col-sm-12 col-xs-12">
                 <div class="movie-img sticky-sb">
-                    <img src="<?php echo base_url("public/front/images/uploads/banner/out_banner/$series->content_out_banner") ?>" alt="">
+                    <img src="<?php echo base_url("public/front/images/uploads/banner/out_banner/$series->content_out_banner"); ?>"
+                        alt="">
                     <div class="movie-btn">
                         <div class="btn-transform transform-vertical red">
                             <div><a href="#" class="item item-1 redbtn"> <i class="ion-play"></i> İzlemeye Başla</a>
@@ -29,7 +32,7 @@
                             </div>
                         </div>
                         <div class="btn-transform transform-vertical">
-                            <div><a href="#" class="item item-1 yellowbtn"> <i class="ion-card"></i> Buy ticket</a>
+                            <div><a href="#" class="item item-1 yellowbtn"> <i class="ion-card"></i> Fragmanı İzle</a>
                             </div>
                             <div><a href="#" class="item item-2 yellowbtn"><i class="ion-card"></i></a></div>
                         </div>
@@ -37,10 +40,18 @@
                 </div>
             </div>
             <div class="col-md-8 col-sm-12 col-xs-12">
+                <?php echo $this->session->flashdata('List'); ?>
                 <div class="movie-single-ct main-content">
-                    <h1 class="bd-hd"><?php echo $series->content_name ?> <span> <?php echo $series->content_create_date ?></span></h1>
+                    <h1 class="bd-hd"><?php echo $series->content_name ?> <span>
+                            <?php echo $series->content_create_date ?></span></h1>
                     <div class="social-btn">
-                        <a href="#" class="parent-btn"><i class="ion-heart"></i> Listeme Ekle</a>
+                        <?php if($userStatus){ ?>
+                        <?php if($listCheck == false){ ?>
+                            <a href="<?php echo base_url("SmDetail/addList/$series->content_id") ?>" class="parent-btn"><i class="ion-heart" style="color: white"></i> Listeme Ekle</a>
+                        <?php }else{ ?>
+                            <a href="<?php echo base_url("SmDetail/deleteList/$series->content_id") ?>" class="parent-btn"><i class="ion-heart"></i> Listemden Çıkar</a>
+                        <?php } ?>
+                        <?php } ?>
                         <div class="hover-bnt">
                             <a href="#" class="parent-btn"><i class="ion-android-share-alt"></i>Paylaş</a>
                             <div class="hvr-item">
@@ -54,32 +65,32 @@
                     <div class="movie-rate">
                         <div class="rate">
                             <i class="ion-android-star"></i>
-                            <p><span>8.1</span> /10<br>
-                                <span class="rv">56 Reviews</span>
+                            <?php $totalComment = count($comments) ?>
+                            <?php $totalPoint   = getPointCount($series->content_id); ?>
+                            <?php $contentPoint = ceil($totalPoint / $totalComment); ?>
+                            <p><span><?php echo $contentPoint ?></span> /10<br>
+                                <span class="rv"><?php echo count($comments) ?> İnceleme</span>
                             </p>
                         </div>
                         <div class="rate-star">
-                            <p>Rate This Movie: </p>
+                            <p>Toplam Puan: </p>
+                            <?php for($i=0; $contentPoint > $i; $i++){ ?>
                             <i class="ion-ios-star"></i>
-                            <i class="ion-ios-star"></i>
-                            <i class="ion-ios-star"></i>
-                            <i class="ion-ios-star"></i>
-                            <i class="ion-ios-star"></i>
-                            <i class="ion-ios-star"></i>
-                            <i class="ion-ios-star"></i>
-                            <i class="ion-ios-star"></i>
+                            <?php } ?>
+                            <?php for($i=10; $contentPoint < $i; $i--){ ?>
                             <i class="ion-ios-star-outline"></i>
+                            <?php } ?>
                         </div>
                     </div>
                     <div class="movie-tabs">
                         <div class="tabs">
                             <ul class="tab-links tabs-mv tabs-series">
                                 <li class="active"><a href="#about">Hakkında</a></li>
-                                <li><a href="#reviews"> Reviews</a></li>
-                                <li><a href="#cast"> Cast & Crew </a></li>
-                                <li><a href="#media"> Media</a></li>
-                                <li><a href="#season"> Season</a></li>
-                                <li><a href="#moviesrelated"> Related Shows</a></li>
+                                <li><a href="#reviews"> Yorumlar</a></li>
+                                <li><a href="#cast"> Oyuncular</a></li>
+                                <li><a href="#media"> Medya</a></li>
+                                <li><a href="#season"> Sezonlar</a></li>
+                                <li><a href="#moviesrelated"> Benzer İçerik</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="about" class="tab active">
@@ -89,27 +100,31 @@
                                                 <?php echo $series->content_description ?>
                                             </p>
                                             <div class="title-hd-sm">
-                                                <h4>Current Season</h4>
-                                                <a href="#" class="time">View All Seasons <i
+                                                <h4>Şimdiki Sezon</h4>
+                                                <a href="#" class="time">Tüm Sezonlar <i
                                                         class="ion-ios-arrow-right"></i></a>
                                             </div>
                                             <!-- movie cast -->
+                                            <?php $lastEpisode = getLastEpisode($series->ep_content_id) ?>
                                             <div class="mvcast-item">
                                                 <div class="cast-it">
                                                     <div class="cast-left series-it">
-                                                        <img src="images\uploads\season.jpg" alt="">
+                                                        <img src="<?php echo base_url("public/front/images/uploads/banner/out_banner/$series->content_out_banner"); ?>"
+                                                            width="110" alt="">
                                                         <div>
-                                                            <a href="#">Season 10</a>
-                                                            <p>21 Episodes</p>
-                                                            <p>Season 10 of The Big Bang Theory premiered on
-                                                                September 19, 2016.</p>
+                                                            <a href="#"><?php echo $lastEpisode->ep_season ?>. Sezon</a>
+                                                            <p><?php echo $lastEpisode->ep_episode ?>. Bölüm</p>
+                                                            <p><?php echo $series->content_name ?>
+                                                                <?php echo $lastEpisode->ep_season ?>. Sezonu
+                                                                <?php echo $lastEpisode->ep_date ?> tarihinde
+                                                                yayınlandı.</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="title-hd-sm">
-                                                <h4>Videos & Photos</h4>
-                                                <a href="#" class="time">All 5 Videos & 245 Photos <i
+                                                <h4>Medya</h4>
+                                                <a href="#" class="time">5 Fotoğraf ve 20 Video <i
                                                         class="ion-ios-arrow-right"></i></a>
                                             </div>
                                             <div class="mvsingle-item ov-item">
@@ -130,7 +145,7 @@
                                                 </div>
                                             </div>
                                             <div class="title-hd-sm">
-                                                <h4>cast</h4>
+                                                <h4>Oyuncular</h4>
                                                 <a href="#" class="time">Full Cast & Crew <i
                                                         class="ion-ios-arrow-right"></i></a>
                                             </div>
@@ -143,64 +158,15 @@
                                                     </div>
                                                     <p>... Robert Downey Jr.</p>
                                                 </div>
-                                                <div class="cast-it">
-                                                    <div class="cast-left">
-                                                        <img src="images\uploads\cast2.jpg" alt="">
-                                                        <a href="#">Chris Hemsworth</a>
-                                                    </div>
-                                                    <p>... Thor</p>
-                                                </div>
-                                                <div class="cast-it">
-                                                    <div class="cast-left">
-                                                        <img src="images\uploads\cast3.jpg" alt="">
-                                                        <a href="#">Mark Ruffalo</a>
-                                                    </div>
-                                                    <p>... Bruce Banner/ Hulk</p>
-                                                </div>
-                                                <div class="cast-it">
-                                                    <div class="cast-left">
-                                                        <img src="images\uploads\cast4.jpg" alt="">
-                                                        <a href="#">Chris Evans</a>
-                                                    </div>
-                                                    <p>... Steve Rogers/ Captain America</p>
-                                                </div>
-                                                <div class="cast-it">
-                                                    <div class="cast-left">
-                                                        <img src="images\uploads\cast5.jpg" alt="">
-                                                        <a href="#">Scarlett Johansson</a>
-                                                    </div>
-                                                    <p>... Natasha Romanoff/ Black Widow</p>
-                                                </div>
-                                                <div class="cast-it">
-                                                    <div class="cast-left">
-                                                        <img src="images\uploads\cast6.jpg" alt="">
-                                                        <a href="#">Jeremy Renner</a>
-                                                    </div>
-                                                    <p>... Clint Barton/ Hawkeye</p>
-                                                </div>
-                                                <div class="cast-it">
-                                                    <div class="cast-left">
-                                                        <img src="images\uploads\cast7.jpg" alt="">
-                                                        <a href="#">James Spader</a>
-                                                    </div>
-                                                    <p>... Ultron</p>
-                                                </div>
-                                                <div class="cast-it">
-                                                    <div class="cast-left">
-                                                        <img src="images\uploads\cast9.jpg" alt="">
-                                                        <a href="#">Don Cheadle</a>
-                                                    </div>
-                                                    <p>... James Rhodes/ War Machine</p>
-                                                </div>
                                             </div>
                                             <div class="title-hd-sm">
-                                                <h4>User reviews</h4>
-                                                <a href="#" class="time">See All 56 Reviews <i
+                                                <h4>En İyi Yorum</h4>
+                                                <a href="#" class="time">56 Yorumun Tümünü Gör <i
                                                         class="ion-ios-arrow-right"></i></a>
                                             </div>
                                             <!-- movie user review -->
                                             <div class="mv-user-review-item">
-                                                <h3>Best Marvel movie in my opinion</h3>
+                                                <h3>Başlık</h3>
                                                 <div class="no-star">
                                                     <i class="ion-android-star"></i>
                                                     <i class="ion-android-star"></i>
@@ -270,232 +236,109 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle"> İnceleme Yaz</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="<?php echo base_url('SmDetail/createComment') ?>"
+                                                    method="POST">
+                                                    <div class="form-group">
+                                                        <label>Puan</label>
+                                                        <select name="point" class="form-control">
+                                                            <?php for ($i=1; $i <= 10; $i++){ ?>
+                                                            <option> <?php echo $i ?> </option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Başlık</label>
+                                                        <input type="text" name="title" class="form-control">
+                                                        <?php if($userStatus){ ?>
+                                                        <input type="hidden" name="userID"
+                                                            value="<?php echo $user[0]->user_id ?>">
+                                                        <input type="hidden" name="contentID"
+                                                            value="<?php echo $series->content_id ?>">
+                                                        <?php } ?>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>İnceleme</label>
+                                                        <textarea name="description" class="form-control" rows="25"
+                                                            placeholder="Düşüncelerin Neler?"></textarea>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-primary"
+                                                            style="float: right;">Gönder</button>
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal" style="float: left;">Close</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal End -->
                                 <div id="reviews" class="tab review">
+                                    <?php echo $this->session->flashdata('Comment'); ?>
                                     <div class="row">
                                         <div class="rv-hd">
                                             <div class="div">
-                                                <h3>Related Movies To</h3>
-                                                <h2>Skyfall: Quantum of Spectre</h2>
+                                                <h2><?php echo $series->content_name ?></h2>
+                                                <h3>Hakkındaki Yorumlar</h3>
                                             </div>
-                                            <a href="#" class="redbtn">Write Review</a>
+                                            <?php if($userStatus){ ?>
+                                            <a href="#" class="redbtn" data-toggle="modal"
+                                                data-target="#exampleModalCenter">İnceleme Yaz</a>
+                                            <?php }else{ ?>
+                                            <a href="<?php echo base_url("UserAuth/login"); ?>"
+                                                class="redbtn loginLink">İnceleme Yaz</a>
+                                            <?php } ?>
                                         </div>
                                         <div class="topbar-filter">
-                                            <p>Found <span>56 reviews</span> in total</p>
+                                            <p>Toplam <span><?php echo count($comments) ?> inceleme</span> bulundu.</p>
                                             <label>Filter by:</label>
                                             <select>
-                                                <option value="range">-- Choose option --
-                                                <option value="saab">-- Choose option 2--
+                                                <option value="range">-- Tarihe Göre (Eski) --
+                                                <option value="saab">-- Tarihe Göre (Yeni) --
+                                                <option value="saab">-- Puana Göre (Yüksek) --
+                                                <option value="saab">-- Puana Göre (Düşük) --
                                             </select>
                                         </div>
+                                        <?php foreach($comments as $comment){ ?>
+                                        <?php $userComment = getUserComment($comment->comment_user_id) ?>
                                         <div class="mv-user-review-item">
                                             <div class="user-infor">
-                                                <img src="images\uploads\userava1.jpg" alt="">
+                                                <img src="<?php echo base_url("public/front/images/uploads/user/$userComment->user_img") ?>"
+                                                    alt="">
                                                 <div>
-                                                    <h3>Best Marvel movie in my opinion</h3>
+                                                    <h3><?php echo $comment->comment_title ?></h3>
                                                     <div class="no-star">
+                                                        <?php for($i=0; $comment->comment_point > $i; $i++){ ?>
                                                         <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
+                                                        <?php } ?>
+                                                        <?php for($i=10; $comment->comment_point < $i; $i--){ ?>
                                                         <i class="ion-android-star last"></i>
+                                                        <?php } ?>
                                                     </div>
                                                     <p class="time">
-                                                        17 December 2016 by <a href="#"> hawaiipierson</a>
+                                                        <?php echo $comment->comment_create_date ?> <a href="#">
+                                                            <?php echo $userComment->user_username ?></a>
                                                     </p>
                                                 </div>
                                             </div>
-                                            <p>This is by far one of my favorite movies from the MCU. The introduction
-                                                of new Characters both good and bad also makes the movie more exciting.
-                                                giving the characters more of a back story can also help audiences
-                                                relate more to different characters better, and it connects a bond
-                                                between the audience and actors or characters. Having seen the movie
-                                                three times does not bother me here as it is as thrilling and exciting
-                                                every time I am watching it. In other words, the movie is by far better
-                                                than previous movies (and I do love everything Marvel), the plotting is
-                                                splendid (they really do out do themselves in each film, there are no
-                                                problems watching it more than once.</p>
-                                        </div>
-                                        <div class="mv-user-review-item">
-                                            <div class="user-infor">
-                                                <img src="images\uploads\userava2.jpg" alt="">
-                                                <div>
-                                                    <h3>Just about as good as the first one!</h3>
-                                                    <div class="no-star">
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                    </div>
-                                                    <p class="time">
-                                                        17 December 2016 by <a href="#"> hawaiipierson</a>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <p>Avengers Age of Ultron is an excellent sequel and a worthy MCU title!
-                                                There are a lot of good and one thing that feels off in my opinion. </p>
-
-                                            <p>THE GOOD:</p>
-
-                                            <p>First off the action in this movie is amazing, to buildings crumbling, to
-                                                evil blue eyed robots tearing stuff up, this movie has the action
-                                                perfectly handled. And with that action comes visuals. The visuals are
-                                                really good, even though you can see clearly where they are through the
-                                                movie, but that doesn't detract from the experience. While all the CGI
-                                                glory is taking place, there are lovable characters that are in the mix.
-                                                First off the original characters, Iron Man, Captain America, Thor,
-                                                Hulk, Black Widow, and Hawkeye, are just as brilliant as they are
-                                                always. And Joss Whedon fixed my main problem in the first Avengers by
-                                                putting in more Hawkeye and him more fleshed out. Then there is the new
-                                                Avengers, Quicksilver, Scarletwich, and Vision, they are pretty cool in
-                                                my opinion. Vision in particular is pretty amazing in all his scenes.
+                                            <p>
+                                                <?php echo $comment->comment_description ?>
                                             </p>
-
-                                            <p>THE BAD:</p>
-
-                                            <p>The beginning of the film it's fine until towards the second act and
-                                                there is when it starts to feel a little rushed. Also I do feel like
-                                                there are scenes missing but there was talk of an extended version on
-                                                Blu-Ray so that's cool.</p>
                                         </div>
-                                        <div class="mv-user-review-item">
-                                            <div class="user-infor">
-                                                <img src="images\uploads\userava3.jpg" alt="">
-                                                <div>
-                                                    <h3>One of the most boring exepirences from watching a movie</h3>
-                                                    <div class="no-star">
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star last"></i>
-                                                        <i class="ion-android-star last"></i>
-                                                        <i class="ion-android-star last"></i>
-                                                        <i class="ion-android-star last"></i>
-                                                        <i class="ion-android-star last"></i>
-                                                        <i class="ion-android-star last"></i>
-                                                        <i class="ion-android-star last"></i>
-                                                        <i class="ion-android-star last"></i>
-                                                        <i class="ion-android-star last"></i>
-                                                    </div>
-                                                    <p class="time">
-                                                        26 March 2017 by<a href="#"> christopherfreeman</a>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <p>I can't right much... it's just so forgettable...Okay, from what I
-                                                remember, I remember just sitting down on my seat and waiting for the
-                                                movie to begin. 5 minutes into the movie, boring scene of Tony Stark
-                                                just talking to his "dead" friends saying it's his fault. 10 minutes in:
-                                                Boring scene of Ultron and Jarvis having robot space battles(I dunno:/).
-                                                15 minutes in: I leave the theatre.2nd attempt at watching it: I fall
-                                                asleep. What woke me up is the next movie on Netflix when the movie was
-                                                over.</p>
-
-                                            <p>Bottemline: It's boring...</p>
-
-                                            <p>10/10 because I'm a Marvel Fanboy</p>
-                                        </div>
-                                        <div class="mv-user-review-item ">
-                                            <div class="user-infor">
-                                                <img src="images\uploads\userava4.jpg" alt="">
-                                                <div>
-                                                    <h3>That spirit of fun</h3>
-                                                    <div class="no-star">
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star last"></i>
-                                                        <i class="ion-android-star last"></i>
-                                                        <i class="ion-android-star last"></i>
-                                                        <i class="ion-android-star last"></i>
-                                                    </div>
-                                                    <p class="time">
-                                                        26 March 2017 by <a href="#"> juliawest</a>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <p>If there were not an audience for Marvel comic heroes than clearly these
-                                                films would not be made, to answer one other reviewer although I
-                                                sympathize with him somewhat. The world is indeed an infinitely more
-                                                complex place than the world of Marvel comics with clearly identifiable
-                                                heroes and villains. But I get the feeling that from Robert Downey, Jr.
-                                                on down the organizer and prime mover as Iron Man behind the Avengers
-                                                these players do love doing these roles because it's a lot of fun. If
-                                                they didn't show that spirit of fun to the audience than these films
-                                                would never be made.</p>
-
-                                            <p>So in that spirit of fun Avengers: Age Of Ultron comes before us and
-                                                everyone looks like they're having a good time saving the world. A
-                                                computer program got loose and took form in this dimension named Ultron
-                                                and James Spader who is completely unrecognizable is running amuck in
-                                                the earth. No doubt Star Trek fans took notice that this guy's mission
-                                                is to cleanse the earth much like that old earth probe NOMAD which got
-                                                its programming mixed up in that classic Star Trek prime story. Wouldst
-                                                Captain James T. Kirk of the Enterprise had a crew like Downey has at
-                                                his command.</p>
-                                            <p>My favorite is always Chris Evans because of the whole cast he best gets
-                                                into the spirit of being a superhero. Of all of them, he's already
-                                                played two superheroes, Captain America and Johnny Storm the Human
-                                                Torch. I'll be before he's done Evans will play a couple of more as long
-                                                as the money's good and he enjoys it.</p>
-
-                                            <p>Pretend you're a kid again and enjoy, don't take it so seriously.</p>
-                                        </div>
-                                        <div class="mv-user-review-item last">
-                                            <div class="user-infor">
-                                                <img src="images\uploads\userava5.jpg" alt="">
-                                                <div>
-                                                    <h3>Impressive Special Effects and Cast</h3>
-                                                    <div class="no-star">
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star last"></i>
-                                                        <i class="ion-android-star last"></i>
-                                                    </div>
-                                                    <p class="time">
-                                                        26 March 2017 by <a href="#"> johnnylee</a>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <p>The Avengers raid a Hydra base in Sokovia commanded by Strucker and they
-                                                retrieve Loki's scepter. They also discover that Strucker had been
-                                                conducting experiments with the orphan twins Pietro Maximoff (Aaron
-                                                Taylor-Johnson), who has super speed, and Wanda Maximoff (Elizabeth
-                                                Olsen), who can control minds and project energy. Tony Stark (Robert
-                                                Downey Jr.) discovers an Artificial Intelligence in the scepter and
-                                                convinces Bruce Banner (Mark Ruffalo) to secretly help him to transfer
-                                                the A.I. to his Ultron defense system. However, the Ultron understands
-                                                that is necessary to annihilate mankind to save the planet, attacks the
-                                                Avengers and flees to Sokovia with the scepter. He builds an armature
-                                                for self-protection and robots for his army and teams up with the twins.
-                                                The Avengers go to Clinton Barton's house to recover, but out of the
-                                                blue, Nick Fury (Samuel L. Jackson) arrives and convinces them to fight
-                                                against Ultron. Will they succeed? </p>
-
-                                            <p>"Avengers: Age of Ultron" is an entertaining adventure with impressive
-                                                special effects and cast. The storyline might be better, since most of
-                                                the characters do not show any chemistry. However, it is worthwhile
-                                                watching this film since the amazing special effects are not possible to
-                                                be described in words. Why Pietro has to die is also not possible to be
-                                                explained. My vote is eight.</p>
-                                        </div>
+                                        <?php } ?>
                                         <div class="topbar-filter">
                                             <label>Reviews per page:</label>
                                             <select>
@@ -504,13 +347,7 @@
                                             </select>
                                             <div class="pagination2">
                                                 <span>Page 1 of 6:</span>
-                                                <a class="active" href="#">1</a>
-                                                <a href="#">2</a>
-                                                <a href="#">3</a>
-                                                <a href="#">4</a>
-                                                <a href="#">5</a>
-                                                <a href="#">6</a>
-                                                <a href="#"><i class="ion-arrow-right-b"></i></a>
+                                                <?php echo $links ?>
                                             </div>
                                         </div>
                                     </div>
@@ -888,90 +725,42 @@
                                 </div>
                                 <div id="season" class="tab">
                                     <div class="row">
+                                        <?php $allEpisode = getAllEpisode($series->ep_content_id) ?>
+                                        <?php foreach($allEpisode as $allEpisode){ ?>
                                         <div class="mvcast-item">
                                             <div class="cast-it">
                                                 <div class="cast-left series-it">
-                                                    <img src="images\uploads\season.jpg" alt="">
+                                                    <img src="<?php echo base_url("public/front/images/uploads/banner/out_banner/$series->content_out_banner") ?>"
+                                                        width="80" alt="">
                                                     <div>
-                                                        <a href="#">Season 10</a>
-                                                        <p>21 Episodes</p>
-                                                        <p>Season 10 of The Big Bang Theory premiered on
-                                                            September 19, 2016.</p>
+                                                        <a href=""><?php echo $allEpisode->ep_season ?>. Sezon</a>
+                                                        <p><?php echo $series->content_name ?>
+                                                            <?php echo $allEpisode->ep_season ?>. Sezonu
+                                                            <?php echo $allEpisode->ep_date ?> tarihinde yayınlandı.</p>
                                                     </div>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="mvcast-item">
-                                            <div class="cast-it">
-                                                <div class="cast-left series-it">
-                                                    <img src="images\uploads\season.jpg" alt="">
-                                                    <div>
-                                                        <a href="#">Season 10</a>
-                                                        <p>21 Episodes</p>
-                                                        <p>Season 10 of The Big Bang Theory premiered on
-                                                            September 19, 2016.</p>
+                                        <?php $episode = getEpisode($allEpisode->ep_season, $allEpisode->ep_content_id) ?>
+                                            <div class="mvcast-item JustifyCenter">
+                                                <div class="cast-it">
+                                                    <div class="series-it">
+                                                        <?php foreach($episode as $episode){ ?>  <br>
+                                                            <img style="margin-bottom: 20px" src="<?php echo base_url("public/front/images/uploads/banner/out_banner/$series->content_out_banner") ?>"
+                                                            width="50" alt="">
+                                                            <a href="<?php echo base_url("watch/$series->content_url/$episode->ep_url") ?>"><?php echo $episode->ep_episode ?>. Bölüm</a>
+                                                        <?php } ?>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="mvcast-item">
-                                            <div class="cast-it">
-                                                <div class="cast-left series-it">
-                                                    <img src="images\uploads\season.jpg" alt="">
-                                                    <div>
-                                                        <a href="#">Season 10</a>
-                                                        <p>21 Episodes</p>
-                                                        <p>Season 10 of The Big Bang Theory premiered on
-                                                            September 19, 2016.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mvcast-item">
-                                            <div class="cast-it">
-                                                <div class="cast-left series-it">
-                                                    <img src="images\uploads\season.jpg" alt="">
-                                                    <div>
-                                                        <a href="#">Season 10</a>
-                                                        <p>21 Episodes</p>
-                                                        <p>Season 10 of The Big Bang Theory premiered on
-                                                            September 19, 2016.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mvcast-item">
-                                            <div class="cast-it">
-                                                <div class="cast-left series-it">
-                                                    <img src="images\uploads\season.jpg" alt="">
-                                                    <div>
-                                                        <a href="#">Season 10</a>
-                                                        <p>21 Episodes</p>
-                                                        <p>Season 10 of The Big Bang Theory premiered on
-                                                            September 19, 2016.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mvcast-item">
-                                            <div class="cast-it">
-                                                <div class="cast-left series-it">
-                                                    <img src="images\uploads\season.jpg" alt="">
-                                                    <div>
-                                                        <a href="#">Season 10</a>
-                                                        <p>21 Episodes</p>
-                                                        <p>Season 10 of The Big Bang Theory premiered on
-                                                            September 19, 2016.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <?php } ?>
                                     </div>
                                 </div>
                                 <div id="moviesrelated" class="tab">
                                     <div class="row">
-                                        <h3>Related Movies To</h3>
                                         <h2>Skyfall: Quantum of Spectre</h2>
+                                        <h3>Related Movies To</h3>
                                         <div class="topbar-filter">
                                             <p>Found <span>12 movies</span> in total</p>
                                             <label>Sort by:</label>
@@ -1084,3 +873,9 @@
 </div>
 
 <?php $this->load->view('front/include/footer') ?>
+
+<script>
+$('#myModal').on('shown.bs.modal', function() {
+    $('#myInput').trigger('focus')
+})
+</script>
