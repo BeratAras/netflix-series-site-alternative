@@ -19,6 +19,10 @@ $route['nedmin/sm-view/(.+)']       =   'Back/Dashboard/smViewPage/$1';
 
 $route['nedmin/sm-episode-update/(.+)']     =   'Back/Dashboard/smEpisodePage/$1';
 
+$route['nedmin/actor-list']         =   'Back/Dashboard/actorListPage';
+$route['nedmin/actor-create']       =   'Back/Dashboard/actorCreatePage';
+$route['nedmin/actor-update/(.+)']  =   'Back/Dashboard/actorUpdatePage/$1';
+
 
 
 

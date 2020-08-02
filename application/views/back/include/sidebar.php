@@ -40,15 +40,15 @@
         </li>
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-files-o"></i>
-            <span>Banner</span>
+            <i class="fa fa-user-o"></i>
+            <span>Oyuncular</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="../layout/top-nav.html"><i class="fa fa-circle-o"></i> Ekle</a></li>
-            <li><a href="../layout/boxed.html"><i class="fa fa-circle-o"></i> Listele</a></li>
+            <li><a href="<?php echo base_url('nedmin/actor-create') ?>"><i class="fa fa-circle-o"></i> Ekle</a></li>
+            <li><a href="<?php echo base_url('nedmin/actor-list'); ?>"><i class="fa fa-circle-o"></i> Listele</a></li>
           </ul>
         </li>
         <li>

@@ -66,7 +66,7 @@
                         <div class="rate">
                             <i class="ion-android-star"></i>
                             <?php $totalComment = count($comments) ?>
-                            <?php $totalPoint   = getPointCount($series->content_id); ?>
+                            <?php $totalPoint   = getPointSum($series->content_id); ?>
                             <?php $contentPoint = ceil($totalPoint / $totalComment); ?>
                             <p><span><?php echo $contentPoint ?></span> /10<br>
                                 <span class="rv"><?php echo count($comments) ?> İnceleme</span>
@@ -112,7 +112,7 @@
                                                         <img src="<?php echo base_url("public/front/images/uploads/banner/out_banner/$series->content_out_banner"); ?>"
                                                             width="110" alt="">
                                                         <div>
-                                                            <a href="#"><?php echo $lastEpisode->ep_season ?>. Sezon</a>
+                                                            <a href="<?php echo base_url("watch/$series->content_url/$lastEpisode->ep_url") ?>"><?php echo $lastEpisode->ep_season ?>. Sezon</a>
                                                             <p><?php echo $lastEpisode->ep_episode ?>. Bölüm</p>
                                                             <p><?php echo $series->content_name ?>
                                                                 <?php echo $lastEpisode->ep_season ?>. Sezonu
@@ -122,7 +122,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="title-hd-sm">
+
+                                            <!-- Medya -->
+                                            <!-- <div class="title-hd-sm">
                                                 <h4>Medya</h4>
                                                 <a href="#" class="time">5 Fotoğraf ve 20 Video <i
                                                         class="ion-ios-arrow-right"></i></a>
@@ -143,29 +145,32 @@
                                                         href="https://www.youtube.com/embed/o-0hcF97wy0"><img
                                                             src="images\uploads\play-vd.png" alt=""></a>
                                                 </div>
-                                            </div>
+                                            </div> -->
+
                                             <div class="title-hd-sm">
                                                 <h4>Oyuncular</h4>
-                                                <a href="#" class="time">Full Cast & Crew <i
-                                                        class="ion-ios-arrow-right"></i></a>
+                                                <a href="#" class="time">Tümünü Gör <i class="ion-ios-arrow-right"></i></a>
                                             </div>
                                             <!-- movie cast -->
-                                            <div class="mvcast-item">
-                                                <div class="cast-it">
-                                                    <div class="cast-left">
-                                                        <img src="images\uploads\cast1.jpg" alt="">
-                                                        <a href="#">Robert Downey Jr.</a>
+                                            <?php foreach($casts as $cast){ ?>
+                                                <div class="mvcast-item">
+                                                    <div class="cast-it">
+                                                        <div class="cast-left">
+                                                            <img src="<?php echo $cast->actor_img ?>" alt="" style="width: 50px">
+                                                            <a href="#"><?php echo $cast->actor_name ?></a>
+                                                        </div>
+                                                        <!-- <p>... Robert Downey Jr.</p> -->
                                                     </div>
-                                                    <p>... Robert Downey Jr.</p>
                                                 </div>
-                                            </div>
-                                            <div class="title-hd-sm">
+                                            <?php } ?>
+                                            
+                                            <!-- En İyi Yorum -->
+                                            <!-- <div class="title-hd-sm">
                                                 <h4>En İyi Yorum</h4>
                                                 <a href="#" class="time">56 Yorumun Tümünü Gör <i
                                                         class="ion-ios-arrow-right"></i></a>
-                                            </div>
-                                            <!-- movie user review -->
-                                            <div class="mv-user-review-item">
+                                            </div> -->
+                                            <!-- <div class="mv-user-review-item">
                                                 <h3>Başlık</h3>
                                                 <div class="no-star">
                                                     <i class="ion-android-star"></i>
@@ -182,18 +187,11 @@
                                                 <p class="time">
                                                     17 December 2016 by <a href="#"> hawaiipierson</a>
                                                 </p>
-                                                <p>This is by far one of my favorite movies from the MCU. The
-                                                    introduction of new Characters both good and bad also makes the
-                                                    movie more exciting. giving the characters more of a back story can
-                                                    also help audiences relate more to different characters better, and
-                                                    it connects a bond between the audience and actors or characters.
-                                                    Having seen the movie three times does not bother me here as it is
-                                                    as thrilling and exciting every time I am watching it. In other
-                                                    words, the movie is by far better than previous movies (and I do
-                                                    love everything Marvel), the plotting is splendid (they really do
-                                                    out do themselves in each film, there are no problems watching it
-                                                    more than once.</p>
-                                            </div>
+                                                <p>
+                                                    Yorum
+                                                </p>
+                                            </div> -->
+
                                         </div>
                                         <div class="col-md-4 col-xs-12 col-sm-12">
                                             <div class="sb-it">
@@ -201,11 +199,11 @@
                                                 <p><a href="#"><?php echo $series->content_director ?></a></p>
                                             </div>
                                             <div class="sb-it">
-                                                <h6>Writer: </h6>
+                                                <h6>Yazar: </h6>
                                                 <p><a href="#"><?php echo $series->content_writer ?></a></p>
                                             </div>
                                             <div class="sb-it">
-                                                <h6>Stars: </h6>
+                                                <h6>Başroller: </h6>
                                                 <p><a href="#">jim Carrey, Robert J.</a>
                                                 </p>
                                             </div>
@@ -218,13 +216,13 @@
                                                 <p><?php echo $series->content_create_date ?></p>
                                             </div>
                                             <div class="sb-it">
-                                                <h6>Run Time:</h6>
+                                                <h6>Süre:</h6>
                                                 <p>22 min</p>
                                             </div>
                                             <div class="sb-it">
-                                                <h6>Plot Keywords:</h6>
+                                                <h6>İlgi:</h6>
                                                 <p class="tags">
-                                                    <?php $keyowrds = explode(', ', $series->content_keywords) ?>
+                                                    <?php $keyowrds = explode(',', $series->content_keywords) ?>
                                                     <?php foreach ($keyowrds as $key => $value) { ?>
                                                     <span class="time"><a href="#"><?php echo $value ?></a></span>
                                                     <?php } ?>
@@ -354,196 +352,53 @@
                                 </div>
                                 <div id="cast" class="tab">
                                     <div class="row">
-                                        <h3>Cast & Crew of</h3>
-                                        <h2>Avengers: Age of Ultron</h2>
+                                        <h3>Oyuncular & Yapımcılar</h3>
+                                        <h2><?php echo $series->content_name ?></h2>
                                         <!-- //== -->
                                         <div class="title-hd-sm">
-                                            <h4>Directors & Credit Writers</h4>
+                                            <h4>Oyuncular</h4>
+                                        </div>
+                                        <?php foreach($casts as $cast){ ?>
+                                            <div class="mvcast-item">
+                                                <div class="cast-it">
+                                                    <div class="cast-left">
+                                                        <img src="<?php echo $cast->actor_img ?>" alt="" style="width: 50px">
+                                                        <a href="#"><?php echo $cast->actor_name ?></a>
+                                                    </div>
+                                                    <!-- <p>... Robert Downey Jr.</p> -->
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+                                        <!-- //== -->
+                                        <div class="title-hd-sm">
+                                            <h4>Yönetmen & Yazar</h4>
                                         </div>
                                         <div class="mvcast-item">
                                             <div class="cast-it">
                                                 <div class="cast-left">
-                                                    <h4>JW</h4>
-                                                    <a href="#">Joss Whedon</a>
+                                                    <h4>Y</h4>
+                                                    <a href="#"><?php echo $series->content_director ?></a>
                                                 </div>
-                                                <p>... Director</p>
-                                            </div>
-                                        </div>
-                                        <!-- //== -->
-                                        <div class="title-hd-sm">
-                                            <h4>Directors & Credit Writers</h4>
-                                        </div>
-                                        <div class="mvcast-item">
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <h4>SL</h4>
-                                                    <a href="#">Stan Lee</a>
-                                                </div>
-                                                <p>... (based on Marvel comics)</p>
+                                                <p>Yönetmen</p>
                                             </div>
                                             <div class="cast-it">
                                                 <div class="cast-left">
-                                                    <h4>JK</h4>
-                                                    <a href="#">Jack Kirby</a>
+                                                    <h4>Y</h4>
+                                                    <a href="#"><?php echo $series->content_writer ?></a>
                                                 </div>
-                                                <p>... (based on Marvel comics)</p>
-                                            </div>
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <h4>JS</h4>
-                                                    <a href="#">Joe Simon</a>
-                                                </div>
-                                                <p>... (character created by: Captain America)</p>
-                                            </div>
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <h4>JS</h4>
-                                                    <a href="#">Joe Simon</a>
-                                                </div>
-                                                <p>... (character created by: Thanos)</p>
-                                            </div>
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <h4>RT</h4>
-                                                    <a href="#">Roy Thomas</a>
-                                                </div>
-                                                <p>... (character created by: Ultron, Vision)</p>
-                                            </div>
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <h4>JB</h4>
-                                                    <a href="#">John Buscema</a>
-                                                </div>
-                                                <p>... (character created by: Ultron, Vision)</p>
-                                            </div>
-                                        </div>
-                                        <!-- //== -->
-                                        <div class="title-hd-sm">
-                                            <h4>Cast</h4>
-                                        </div>
-                                        <div class="mvcast-item">
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <img src="images\uploads\cast1.jpg" alt="">
-                                                    <a href="#">Robert Downey Jr.</a>
-                                                </div>
-                                                <p>... Robert Downey Jr.</p>
-                                            </div>
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <img src="images\uploads\cast2.jpg" alt="">
-                                                    <a href="#">Chris Hemsworth</a>
-                                                </div>
-                                                <p>... Thor</p>
-                                            </div>
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <img src="images\uploads\cast3.jpg" alt="">
-                                                    <a href="#">Mark Ruffalo</a>
-                                                </div>
-                                                <p>... Bruce Banner/ Hulk</p>
-                                            </div>
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <img src="images\uploads\cast4.jpg" alt="">
-                                                    <a href="#">Chris Evans</a>
-                                                </div>
-                                                <p>... Steve Rogers/ Captain America</p>
-                                            </div>
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <img src="images\uploads\cast5.jpg" alt="">
-                                                    <a href="#">Scarlett Johansson</a>
-                                                </div>
-                                                <p>... Natasha Romanoff/ Black Widow</p>
-                                            </div>
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <img src="images\uploads\cast6.jpg" alt="">
-                                                    <a href="#">Jeremy Renner</a>
-                                                </div>
-                                                <p>... Clint Barton/ Hawkeye</p>
-                                            </div>
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <img src="images\uploads\cast7.jpg" alt="">
-                                                    <a href="#">James Spader</a>
-                                                </div>
-                                                <p>... Ultron</p>
-                                            </div>
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <img src="images\uploads\cast9.jpg" alt="">
-                                                    <a href="#">Don Cheadle</a>
-                                                </div>
-                                                <p>... James Rhodes/ War Machine</p>
-                                            </div>
-                                        </div>
-                                        <!-- //== -->
-                                        <div class="title-hd-sm">
-                                            <h4>Produced by</h4>
-                                        </div>
-                                        <div class="mvcast-item">
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <h4>VA</h4>
-                                                    <a href="#">Victoria Alonso</a>
-                                                </div>
-                                                <p>... executive producer</p>
-                                            </div>
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <h4>MB</h4>
-                                                    <a href="#">Mitchel Bell</a>
-                                                </div>
-                                                <p>... co-producer (as Mitch Bell)</p>
-                                            </div>
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <h4>JC</h4>
-                                                    <a href="#">Jamie Christopher</a>
-                                                </div>
-                                                <p>... associate producer</p>
-                                            </div>
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <h4>LD</h4>
-                                                    <a href="#">Louis D’Esposito</a>
-                                                </div>
-                                                <p>... executive producer</p>
-                                            </div>
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <h4>JF</h4>
-                                                    <a href="#">Jon Favreau</a>
-                                                </div>
-                                                <p>... executive producer</p>
-                                            </div>
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <h4>KF</h4>
-                                                    <a href="#">Kevin Feige</a>
-                                                </div>
-                                                <p>... producer</p>
-                                            </div>
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <h4>AF</h4>
-                                                    <a href="#">Alan Fine</a>
-                                                </div>
-                                                <p>... executive producer</p>
-                                            </div>
-                                            <div class="cast-it">
-                                                <div class="cast-left">
-                                                    <h4>JF</h4>
-                                                    <a href="#">Jeffrey Ford</a>
-                                                </div>
-                                                <p>... associate producer</p>
+                                                <p>Yazar</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div id="media" class="tab">
+                                    <div class="rv-hd">
+                                        <div>
+                                            <h3>Yapım Aşamasında</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div id="media" class="tab">
                                     <div class="row">
                                         <div class="rv-hd">
                                             <div>
@@ -722,7 +577,7 @@
                                                     src="images\uploads\image2-1.jpg" alt=""></a>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div id="season" class="tab">
                                     <div class="row">
                                         <?php $allEpisode = getAllEpisode($series->ep_content_id) ?>
@@ -759,19 +614,10 @@
                                 </div>
                                 <div id="moviesrelated" class="tab">
                                     <div class="row">
-                                        <h2>Skyfall: Quantum of Spectre</h2>
-                                        <h3>Related Movies To</h3>
+                                        <h2><?php echo $series->content_name ?> ile Benzer İçerikler</h2>
+                                        <h3>Bunu Beğendiysen Bunları da Sevebilirsin:</h3>
                                         <div class="topbar-filter">
-                                            <p>Found <span>12 movies</span> in total</p>
-                                            <label>Sort by:</label>
-                                            <select>
-                                                <option value="popularity">Popularity Descending
-                                                <option value="popularity">Popularity Ascending
-                                                <option value="rating">Rating Descending
-                                                <option value="rating">Rating Ascending
-                                                <option value="date">Release date Descending
-                                                <option value="date">Release date Ascending
-                                            </select>
+                                            <p><span>12 içerik</span> bulundu.</p>
                                         </div>
                                         <div class="movie-item-style-2">
                                             <img src="images\uploads\mv1.jpg" alt="">
@@ -781,84 +627,6 @@
                                                 <p class="describe">Earth's mightiest heroes must come together and
                                                     learn to fight as a team if they are to stop the mischievous Loki
                                                     and his alien army from enslaving humanity...</p>
-                                                <p class="run-time"> Run Time: 2h21’ . <span>MMPA: PG-13 </span> .
-                                                    <span>Release: 1 May 2015</span></p>
-                                                <p>Director: <a href="#">Joss Whedon</a></p>
-                                                <p>Stars: <a href="#">Robert Downey Jr.,</a> <a href="#">Chris
-                                                        Evans,</a> <a href="#"> Chris Hemsworth</a></p>
-                                            </div>
-                                        </div>
-                                        <div class="movie-item-style-2">
-                                            <img src="images\uploads\mv2.jpg" alt="">
-                                            <div class="mv-item-infor">
-                                                <h6><a href="#">into the wild <span>(2014)</span></a></h6>
-                                                <p class="rate"><i class="ion-android-star"></i><span>7.8</span> /10</p>
-                                                <p class="describe">As Steve Rogers struggles to embrace his role in the
-                                                    modern world, he teams up with a fellow Avenger and S.H.I.E.L.D
-                                                    agent, Black Widow, to battle a new threat...</p>
-                                                <p class="run-time"> Run Time: 2h21’ . <span>MMPA: PG-13 </span> .
-                                                    <span>Release: 1 May 2015</span></p>
-                                                <p>Director: <a href="#">Anthony Russo,</a><a href="#">Joe Russo</a></p>
-                                                <p>Stars: <a href="#">Chris Evans,</a> <a href="#">Samuel L.
-                                                        Jackson,</a> <a href="#"> Scarlett Johansson</a></p>
-                                            </div>
-                                        </div>
-                                        <div class="movie-item-style-2">
-                                            <img src="images\uploads\mv3.jpg" alt="">
-                                            <div class="mv-item-infor">
-                                                <h6><a href="#">blade runner <span>(2015)</span></a></h6>
-                                                <p class="rate"><i class="ion-android-star"></i><span>7.3</span> /10</p>
-                                                <p class="describe">Armed with a super-suit with the astonishing ability
-                                                    to shrink in scale but increase in strength, cat burglar Scott Lang
-                                                    must embrace his inner hero and help...</p>
-                                                <p class="run-time"> Run Time: 2h21’ . <span>MMPA: PG-13 </span> .
-                                                    <span>Release: 1 May 2015</span></p>
-                                                <p>Director: <a href="#">Peyton Reed</a></p>
-                                                <p>Stars: <a href="#">Paul Rudd,</a> <a href="#"> Michael Douglas</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="movie-item-style-2">
-                                            <img src="images\uploads\mv4.jpg" alt="">
-                                            <div class="mv-item-infor">
-                                                <h6><a href="#">Mulholland pride<span> (2013) </span></a></h6>
-                                                <p class="rate"><i class="ion-android-star"></i><span>7.2</span> /10</p>
-                                                <p class="describe">When Tony Stark's world is torn apart by a
-                                                    formidable terrorist called the Mandarin, he starts an odyssey of
-                                                    rebuilding and retribution.</p>
-                                                <p class="run-time"> Run Time: 2h21’ . <span>MMPA: PG-13 </span> .
-                                                    <span>Release: 1 May 2015</span></p>
-                                                <p>Director: <a href="#">Shane Black</a></p>
-                                                <p>Stars: <a href="#">Robert Downey Jr., </a> <a href="#"> Guy
-                                                        Pearce,</a><a href="#">Don Cheadle</a></p>
-                                            </div>
-                                        </div>
-                                        <div class="movie-item-style-2">
-                                            <img src="images\uploads\mv5.jpg" alt="">
-                                            <div class="mv-item-infor">
-                                                <h6><a href="#">skyfall: evil of boss<span> (2013) </span></a></h6>
-                                                <p class="rate"><i class="ion-android-star"></i><span>7.0</span> /10</p>
-                                                <p class="describe">When Tony Stark's world is torn apart by a
-                                                    formidable terrorist called the Mandarin, he starts an odyssey of
-                                                    rebuilding and retribution.</p>
-                                                <p class="run-time"> Run Time: 2h21’ . <span>MMPA: PG-13 </span> .
-                                                    <span>Release: 1 May 2015</span></p>
-                                                <p>Director: <a href="#">Alan Taylor</a></p>
-                                                <p>Stars: <a href="#">Chris Hemsworth, </a> <a href="#"> Natalie
-                                                        Portman,</a><a href="#">Tom Hiddleston</a></p>
-                                            </div>
-                                        </div>
-                                        <div class="topbar-filter">
-                                            <label>Movies per page:</label>
-                                            <select>
-                                                <option value="range">5 Movies
-                                                <option value="saab">10 Movies
-                                            </select>
-                                            <div class="pagination2">
-                                                <span>Page 1 of 2:</span>
-                                                <a class="active" href="#">1</a>
-                                                <a href="#">2</a>
-                                                <a href="#"><i class="ion-arrow-right-b"></i></a>
                                             </div>
                                         </div>
                                     </div>

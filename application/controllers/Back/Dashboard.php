@@ -59,6 +59,7 @@ class Dashboard extends CI_Controller {
         $data = new stdClass();
         $data->contents = $this->Back->getWhere('contents', ['content_id' => $id]);
         $data->seasons = $this->Back->getWhereResult('episodes', ['ep_content_id' => $id], 'ep_season');
+        $data->actors  = $this->Back->getResult('actors');
         $this->load->view('back/pages/smView', $data);
     }
 
@@ -209,7 +210,7 @@ class Dashboard extends CI_Controller {
         $episode    =   $this->input->post('episode');
         $name       =   $this->input->post('name');
         $frame      =   $this->input->post('frame');
-        $slug       =   $this->input->post('season'); $this->input->post('episode') + '-episode';
+        $slug       =   $this->input->post('season').'-season-'.$this->input->post('episode').'-episode';
         $date       =   date('d-m-Y');
         $type       =   $this->input->post('type');
 
@@ -286,6 +287,114 @@ class Dashboard extends CI_Controller {
         }
     }
 
+    public function smActorAdd()
+    {
+        $contentID = $this->input->post('contentId');
+        $actor     = $this->input->post('actor');
+
+        $data = array
+        (
+            'cast_actor_id'     =>  $actor,
+            'cast_content_id'   =>  $contentID
+        );
+
+        $this->load->model('Back');
+
+        $result = $this->Back->add('content_cast', $data);
+
+        if($result)
+        {
+            $this->session->set_flashdata('InsertActor', '<div class="alert alert-success" role="alert"> Oyuncu Eklendi! </div>');
+            redirect($_SERVER['HTTP_REFERER']);
+        }else{
+            $this->session->set_flashdata('InsertActor', '<div class="alert alert-danger" role="alert"> Oyuncu Eklenemedi! </div>');
+        }
+    }
+
+    // Actor & Process //
+
+    public function actorListPage()
+    {
+        $this->load->model('Back');
+        $data['actors'] = $this->Back->get('actors');
+        $this->load->view('back/pages/actorList', $data);
+    }
+    
+    public function actorCreatePage()
+    {
+        $this->load->view('back/pages/actorCreate');
+    }
+
+    public function actorCreate()
+    {
+        $name           =   $this->input->post('name');
+        $birthday       =   $this->input->post('birthday');
+        $birthplace     =   $this->input->post('birthplace');
+        $bio            =   $this->input->post('bio');
+        $img            =   $this->input->post('img');
+        $status         =   $this->input->post('status');
+
+        $data = array
+		(
+			'actor_name'		=> 	$name,
+            'actor_birthday'    => 	$birthday,
+			'actor_birthplace'	=>	$birthplace,
+            'actor_bio'		    =>	$bio,
+            'actor_img'         =>  $img,
+            'actor_status'      =>  $status
+        );
+        
+        $this->load->model('Back');
+        $result = $this->Back->add('actors', $data);
+
+        if($result)
+        {
+            $this->session->set_flashdata('Insert', "<div class='alert alert-success' role='alert'> {$name} Adlı Oyuncu Eklendi.  </div>");
+            redirect('nedmin/actor-list');
+        }else{
+            $this->session->set_flashdata('Insert', '<div class="alert alert-danger" role="alert"> Güncelleme Başarısız! </div>');
+        }
+    }
+
+    public function actorUpdatePage($id)
+    {
+        $data = new stdClass();
+        $this->load->model('Back');
+        $data->actor = $this->Back->getWhere('actors', ['actor_id' => $id]);
+        $this->load->view('back/pages/actorUpdate', $data);
+    }
+
+    public function actorUpdate()
+    {
+        $id             =   $this->input->post('id');
+        $name           =   $this->input->post('name');
+        $birthday       =   $this->input->post('birthday');
+        $birthplace     =   $this->input->post('birthplace');
+        $bio            =   $this->input->post('bio');
+        $img            =   $this->input->post('img');
+        $status         =   $this->input->post('status');
+
+        $data = array
+		(
+			'actor_name'		=> 	$name,
+            'actor_birthday'    => 	$birthday,
+			'actor_birthplace'	=>	$birthplace,
+            'actor_bio'		    =>	$bio,
+            'actor_img'         =>  $img,
+            'actor_status'      =>  $status
+        );
+        
+        $this->load->model('Back');
+        $result = $this->Back->update('actors', $data, ['actor_id' => $id]);
+
+        if($result)
+        {
+            $this->session->set_flashdata('Update', '<div class="alert alert-success" role="alert"> Güncelleme Başarılı! </div>');
+            redirect('nedmin/actor-list');
+        }else{
+            $this->session->set_flashdata('Update', '<div class="alert alert-danger" role="alert"> Güncelleme Başarısız! </div>');
+        }
+    }
 }
 
 

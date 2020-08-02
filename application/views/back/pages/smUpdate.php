@@ -109,7 +109,7 @@
                         <!-- /.box-body -->
 
                         <div class="box-footer">
-                            <button type="submit" class="btn btn-primary btn-block">Kaydet</button>
+                            <button type="submit" class="btn btn-primary btn-block">Güncelle</button>
                         </div>
                     </form>
                 </div>

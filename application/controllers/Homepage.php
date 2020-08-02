@@ -25,11 +25,64 @@ class Homepage extends CI_Controller {
 
 		// Homepage Process //
 		$this->load->model('Database');
-		$data->contents = $this->Database->getResult('contents');
-		$data->seriesContents = $this->Database->getWhereResult('contents', ['content_type' => 'Series']);
+		$data->contents 		= $this->Database->getResult('contents');
+		$data->seriesContents 	= $this->Database->getWhereResult('contents', ['content_type' => 'Series']);
+		$data->movieContents 	= $this->Database->getWhereResult('contents', ['content_type' => 'Movie']);
+		$data->banners 			= $this->Database->getWhereResult('contents', ['content_banner_check' => 1]);
+		$data->actor 			= $this->Database->actorGet();
 
         $this->load->view('front/homepage', $data);
 	}
+	
+	public function deneme()
+	{
+	
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,'https://tr.wikipedia.org/w/index.php?title=Kategori:Amerikal%C4%B1_erkek_sinema_oyuncular%C4%B1&pagefrom=Burton%2C+Richard%0ARichard+Burton#mw-pages'); 
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"]);
+		$result = curl_exec($ch);
+		curl_close($ch);
+
+		$desen = '@<div class="mw-category-group">(.*?)</div>@si';
+		preg_match_all($desen,$result,$actor_name);
+		
+		$res = strip_tags($actor_name[0][0], "");
+
+		echo $res;
+
+	}
+
+	// Search Process //
+
+	public function smSearch()
+	{
+		$character = $this->input->post('character');
+		$this->load->model('Database');
+
+		$result = $this->Database->smSearch($character);
+
+		if(!empty($result))
+		{
+			foreach($result as $result)
+			{
+				echo 
+				"<li>".
+				"<a href=".base_url('watch/').$result->content_url.">".
+				"<img src=".base_url("public/front/images/uploads/banner/out_banner/").$result->content_out_banner." width='50'>"
+				.$result->content_name.
+				"</a>".
+				"</li>";
+			}
+		}
+		else
+		{
+			echo "<li> İçerik bulunamadı. </li>";
+		}
+	}
+
+	// Facebook Process //
 
     public function facebookLogin()
     {

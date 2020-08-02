@@ -31,6 +31,8 @@ class SmDetail extends CI_Controller {
             $data->listCheck = $this->Database->listCheck($series->content_id, $user[0]->user_id);
         }
         
+        //getCast
+        $data->casts = $this->Database->getCast($series->content_id);
 
         $this->load->view('front/seriessingle', $data);
     }
@@ -41,7 +43,7 @@ class SmDetail extends CI_Controller {
         $data = new stdClass();
         $data->watchDetail = $this->Database->watchGet($content_slug, $ep_slug);
         $watchDetail = $this->Database->watchGet($content_slug, $ep_slug);
-        $data->comments = $this->Database->getWhereResult('comments', ['comment_content_id' =>  $watchDetail->content_id]);
+        $data->EpisodeComments = $this->Database->getWhereResult('episode_comments', ['ec_content_id' =>  $watchDetail->content_id, 'ec_ep_id' => $watchDetail->ep_id]);
         $this->load->view('front/watchsingle', $data);
     }
 
@@ -73,6 +75,36 @@ class SmDetail extends CI_Controller {
 		}else{
 			$this->session->set_flashdata('Comment', '<div class="alert alert-danger" role="alert"> İnceleme Gönderilemedi! </div>');
 		}
+    }
+
+    public function createEpisodeComment()
+    {
+        $userID       = $this->input->post('userID');
+        $contentID    = $this->input->post('contentID');
+        $episodeID    = $this->input->post('episodeID');  
+        $description  = $this->input->post('description');
+        $date         = date('m-d-Y');
+
+        $data = array
+        (
+            'ec_user_id'        => $userID,
+            'ec_content_id'     => $contentID,
+            'ec_ep_id'          => $episodeID,
+            'ec_description'    => $description,
+            'ec_create_date'    => $date
+        );
+
+        $this->load->model('Database');
+        $result = $this->Database->create('episode_comments', $data);
+
+        if($result)
+        {
+            $this->session->set_flashdata('EpisodeComment', '<div class="alert alert-success" role="alert"> Yorum Gönderildi! </div>');
+            redirect($_SERVER['HTTP_REFERER']);
+        }else{
+            $this->session->set_flashdata('EpisodeComment', '<div class="alert alert-danger" role="alert"> Yorumun Gönderilemedi! </div>');
+            redirect($_SERVER['HTTP_REFERER']);
+        }
     }
 
     public function addList($contentID)

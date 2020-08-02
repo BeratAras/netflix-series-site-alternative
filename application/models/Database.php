@@ -136,5 +136,32 @@ class Database extends CI_Model {
         return $listCheck;
     }
 
+    function smSearch($character)
+    {
+        $result = $this->db
+        ->like('content_name', $character)
+        ->limit(10)
+        ->from('contents')
+        ->get()
+        ->result();
+        return $result;
+    }
+
+    function actorGet()
+    {
+        return $this->db->order_by('actor_id', 'RANDOM')->where(['actor_status' => 1])->get('actors')->row();
+    }
+
+    function getCast($id)
+    {
+        return $this->db
+        ->select('*')
+        ->from('content_cast')
+        ->join('actors', 'cast_actor_id = actor_id')
+        ->where('cast_content_id', $id)
+        ->get()
+        ->result();
+    }
+
 }
 ?>

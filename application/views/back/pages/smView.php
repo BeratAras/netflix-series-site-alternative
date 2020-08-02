@@ -104,14 +104,16 @@
                     <!-- /.col -->
                     <div class="col-md-9">
                         <div><?php echo $this->session->flashdata('Episode'); ?></div>
+                        <div><?php echo $this->session->flashdata('InsertActor'); ?></div>
                         <div class="nav-tabs-custom">
                             <ul class="nav nav-tabs">
-                                <li class="active"><a href="#activity" data-toggle="tab">Yorumlar</a></li>
+                                <li class="active"><a href="#comment" data-toggle="tab">Yorumlar</a></li>
                                 <li><a href="#season" data-toggle="tab">Sezonlar ve Bölümler</a></li>
                                 <li><a href="#episode" data-toggle="tab">Bölüm Ekle</a></li>
+                                <li><a href="#actor" data-toggle="tab">Oyuncu Ekle</a></li>
                             </ul>
                             <div class="tab-content">
-                                <div class="active tab-pane" id="activity">
+                                <div class="active tab-pane" id="comment">
                                     <!-- Post -->
                                     <div class="post">
                                         <div class="user-block">
@@ -135,8 +137,8 @@
                                     </div>
                                     <!-- /.post -->
                                 </div>
-                                <!-- /.tab-pane -->
 
+                                <!-- /.tab-pane -->
                                 <div class="tab-pane" id="season">
                                     <?php foreach($seasons as $season){ ?>
                                     <div class="box box-warning box-solid">
@@ -165,9 +167,11 @@
                                                 <tbody>
                                                     <?php foreach($result as $result){ ?>
                                                     <tr>
-                                                        <td><?php echo $result->ep_episode ?>. Bölüm - <?php echo $result->ep_name ?></td>
+                                                        <td><?php echo $result->ep_episode ?>. Bölüm -
+                                                            <?php echo $result->ep_name ?></td>
                                                         <td><?php echo $result->ep_date ?></td>
-                                                        <td><?php if($result->ep_type == 1){ echo 'Sezon Finali'; }elseif($result->ep_type == 2){ echo 'Final'; }else{ echo 'Normal'; } ?></td>
+                                                        <td><?php if($result->ep_type == 1){ echo 'Sezon Finali'; }elseif($result->ep_type == 2){ echo 'Final'; }else{ echo 'Normal'; } ?>
+                                                        </td>
                                                         <td width="300">
                                                             <a href="<?php echo base_url("nedmin/sm-episode-view/$result->ep_id") ?>"
                                                                 class="btn btn-success">Görüntüle</a>
@@ -186,7 +190,6 @@
                                 </div>
 
                                 <!-- /.tab-pane -->
-
                                 <div class="tab-pane" id="episode">
                                     <form method="POST"
                                         action="<?php echo base_url('back/Dashboard/smEpisodeCreate') ?>"
@@ -244,18 +247,34 @@
                                 </div>
                                 <!-- /.tab-pane -->
 
-                               
-                            </div>
-                            <!-- /.tab-content -->
-                        </div>
-                        <!-- /.nav-tabs-custom -->
-                    </div>
-                    <!-- /.col -->
-                </div>
-                <!-- /.row -->
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="actor">
+                                    <form method="POST" action="<?php echo base_url('back/Dashboard/smActorAdd') ?>" class="form-horizontal">
+                                        <div class="form-group">
+                                            <label for="inputName" class="col-sm-2 control-label">Oyuncu</label>
+                                            <input type="hidden" name="contentId" value="<?php echo $contents->content_id ?>">
+                                            <div class="col-sm-10">
+                                                <select class="form-control select2" style="width: 100%" multiple="multiple" data-placeholder="Seç" name="actor">
+                                                    <?php foreach($actors as $actor){ ?>
+                                                        <option value="<?php echo $actor->actor_id ?>"><?php echo $actor->actor_name ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                <button type="submit" class="btn btn-danger">Ekle</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- /.tab-pane -->
 
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
-            <!-- /.content -->
         </div>
 
 

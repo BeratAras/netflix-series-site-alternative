@@ -18,6 +18,11 @@ class Back extends CI_Model {
         return $this->db->get($table)->result();
     }
 
+    function getResult($table)
+    {
+        return $this->db->get($table)->result();
+    }
+
     function getWhere($table, $where = array())
     {
         return $this->db->where($where)->get($table)->row();

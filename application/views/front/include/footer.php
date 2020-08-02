@@ -61,5 +61,40 @@
 <script src="<?php echo base_url('public/front/js/plugins.js') ?>"></script>
 <script src="<?php echo base_url('public/front/js/plugins2.js') ?>"></script>
 <script src="<?php echo base_url('public/front/js/custom.js') ?>"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+	$('#contents').fadeOut();
+	$( "#character" ).keyup(function() 
+	{
+		var character = $('#character').val();
+		var postData =
+		{
+			'character': character
+		};
+		if(character.length === 0){
+			$('#contents').fadeOut();
+		}else{
+			$.ajax
+			({
+				type: "POST",
+				url: "<?php echo base_url(); ?>Homepage/smSearch",
+				data: postData,
+				success: function (data)
+				{
+					if(data.length > 0)
+					{
+						$('#contents').fadeIn();
+						$('#contents').html(data);
+					}
+				}
+			});
+		}
+	});
+});
+
+</script>
+
+
 </body>
 </html>

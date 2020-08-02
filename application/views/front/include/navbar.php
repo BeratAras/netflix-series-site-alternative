@@ -167,8 +167,12 @@
 	    
 	    <!-- top search form -->
 	    <div class="top-search">
-			<input type="text" placeholder="İçerik, kişi, tür">
-	    </div>
+			<input type="text" placeholder="İçerik, kişi, tür" id="character">
+		
+		</div>
+		<div class="search">
+		<div id="contents" class="searchBox"></div>
+		</div>
 	</div>
 </header>
 <!-- END | Header -->

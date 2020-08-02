@@ -5073,6 +5073,19 @@ ul {
   border-radius: 3px;
   background-color: #233a50;
 }
+.searchBox{
+  color: white; 
+  background: rgb(2, 13, 24, 0.9); 
+  padding: 20px;
+  list-style: none;
+}
+.searchBox a{
+  color: white; 
+}
+.searchBox img{
+  padding-right: 10px;
+  margin-bottom: 15px;
+}
 .sidebar .sb-cate ul li {
   margin-bottom: 15px;
 }
@@ -5094,7 +5107,7 @@ ul {
 }
 .sidebar .sb-recentpost .recent-item span {
   font-family: 'Dosis', sans-serif;
-  font-size: 48px;
+  font-size: 45px;
   color: #4f5b68;
   font-weight: 300;
   text-transform: uppercase;
@@ -5152,6 +5165,29 @@ ul {
   position: inherit;
   margin-top: -100px;
   margin-bottom: 60px;
+}
+
+.sidebar .episode-vote .row {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #5E8BA9;
+}
+
+.sidebar .episode-vote .row li{
+   list-style: none;
+}
+.sidebar .episode-vote .row li label{
+
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: bolder;
+}
+.sidebar .episode-vote .row li .like{
+  color: green;
+}
+.sidebar .episode-vote .row li .diss{
+  color: red;
 }
 .time {
   font-family: 'Nunito', sans-serif;
@@ -5337,13 +5373,24 @@ ul {
 .cebsingle-socail a i {
   font-size: 22px;
 }
-.blog-detail-ct h1 {
+.blog-detail-ct h1,
+.blog-detail-ct h2 {
   font-family: 'Dosis', sans-serif;
-  font-size: 36px;
   color: #ffffff;
   font-weight: 700;
   text-transform: none;
   margin-bottom: 0px;
+}
+.blog-detail-ct h1 {
+  font-size: 36px;
+}
+.blog-detail-ct h2 {
+  font-size: 25px;
+}
+@media (max-width: 767px) {
+  .blog-detail-ct h2 {
+     font-size: 15px;
+  }
 }
 .blog-detail-ct p {
   margin-bottom: 20px;
@@ -5525,6 +5572,10 @@ ul {
   font-weight: bold;
   text-transform: uppercase;
   border: none;
+}
+.blog-detail-ct .series-des{
+  font-size: 20px;
+  font-weight: bolder;
 }
 .latestnew .morenew .more-items {
   display: flex;

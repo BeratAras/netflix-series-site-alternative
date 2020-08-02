@@ -42,6 +42,18 @@ function getAllEpisode($id)
     return $result;
 }
 
+function getComment($id) //Anasayfa puan sistemi için yorumları çekiyor.
+{
+    $ci =& get_instance();
+    $result = $ci->db
+    ->select('*')
+    ->from('comments')
+    ->where('comment_content_id', $id)
+    ->get()
+    ->result();
+    return $result;
+}
+
 function getUserComment($id) //Yorumlar kısmındaki kullanıcı verileri çekiliyor.
 {
     $ci =& get_instance();
@@ -54,7 +66,7 @@ function getUserComment($id) //Yorumlar kısmındaki kullanıcı verileri çekil
     return $result;
 }
 
-function getPointCount($id) //Dizinin toplam puan ortalaması
+function getPointSum($id) //Dizinin toplam puan ortalaması
 {
     $ci =& get_instance();
     $result = $ci->db
